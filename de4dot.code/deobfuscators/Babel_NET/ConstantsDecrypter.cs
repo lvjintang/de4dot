@@ -24,6 +24,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using de4dot.blocks;
+using System.Runtime.Serialization;
 
 namespace de4dot.code.deobfuscators.Babel_NET {
 	class ConstantsDecrypter {
@@ -238,7 +239,9 @@ namespace de4dot.code.deobfuscators.Babel_NET {
 
 		byte[] DecryptArray(byte[] encryptedData, int elemSize) {
 			var decrypted = resourceDecrypter.Decrypt(encryptedData);
+#pragma warning disable SYSLIB0011
 			var ary = (Array)new BinaryFormatter().Deserialize(new MemoryStream(decrypted));
+#pragma warning restore SYSLIB0011
 			if (ary is byte[])
 				return (byte[])ary;
 			var newAry = new byte[ary.Length * elemSize];
